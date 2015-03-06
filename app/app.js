@@ -137,7 +137,7 @@ var autoUpdateIntervalId = null;
 var enableAutoUpdate = function() {
 
   // Check every 20 seconds for an updated time
-  autoUpdateIntervalId = setInterval(updateToCurrentTime, 1000 * 5);
+  autoUpdateIntervalId = setInterval(updateToCurrentTime, 1000 * 20);
 
   // Check on window focus
   window.onfocus = updateToCurrentTime;
