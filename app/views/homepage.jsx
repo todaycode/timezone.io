@@ -10,7 +10,7 @@ var demoTimezones = [
       {
         name: 'Brian',
         tz: 'America/Los_Angeles',
-        city: 'San Francisco',
+        location: 'San Francisco',
         avatar: '/images/avatars/brian.jpg'
       }
     ]
@@ -21,13 +21,13 @@ var demoTimezones = [
       {
         name: 'Dan',
         tz: 'America/New_York',
-        city: 'New York',
+        location: 'New York',
         avatar: '/images/avatars/dan.jpg'
       },
       {
         name: 'Sunil',
         tz: 'America/New_York',
-        city: 'DC',
+        location: 'DC',
         avatar: '/images/avatars/sunil.png'
       }
     ]
@@ -37,7 +37,7 @@ var demoTimezones = [
     people: [{
       name: 'Mike',
       tz: 'Europe/Madrid',
-      city: 'Barcelona',
+      location: 'Barcelona',
       avatar: '/images/avatars/mike.jpg'
     }]
   }
