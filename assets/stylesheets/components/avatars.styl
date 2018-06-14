@@ -1,0 +1,31 @@
+.avatar,
+.avatar-placeholder
+  display: block
+  width: $avatarSize
+  height: $avatarSize
+  border-radius: 50%
+  background-size: 100%
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2)
+
+  &.large
+    width: $avatarSize * 2
+    height: $avatarSize * 2
+
+  &.mini
+    width: 36px
+    height: 36px
+
+  &.header-avatar
+    width: 2em
+    height: 2em
+    background-color: $fillColor
+
+a.avatar
+  cancelLinkHover()
+
+// Initials/text placeholder
+.avatar-placeholder
+  line-height: $avatarSize + 2px
+  text-align: center
+  background-color: $lightFillColor
+  font-size: 1.3em

@@ -1,14 +1,14 @@
 .app-container
   display: flex
   min-width: 880px
-  
-$sideBarMargin = 20px;
+
+$sidebarWidth = 180px
+$sidebarPadding = 1em
 
 .app-sidebar
   flex-shrink: 0
-  min-width: 200px
-  max-width: 400px
-  padding: 2em 1em 1em
+  width: $sidebarWidth
+  padding: $sidebarPadding
   background: $fillColor
 
 .app-sidebar--time
@@ -16,30 +16,202 @@ $sideBarMargin = 20px;
   font-size: 2em
   text-align: center
   font-weight: normal
-  
+
 .app-sidebar--button-row
   display: flex
   justify-content: space-between
-  
+
+// .app-sidebar--format-select
+//   text-align: center
+
+
+.app-sidebar--admin
+  margin: 1em 0
+  width: "calc(%s - 2 * %s)" % ($sidebarWidth $sidebarPadding)
+
+  button
+    width: 100%
+
+// TOOLBAR DESIGN START ------------------------------------------------------
+.app-container.app-with-toolbar
+  display block
+
+$toolbarItemHeight = 32px;
+
+.app-toolbar
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 0.5em 1em
+  border-bottom: 1px solid $lightBorderColor
+
+  .site-branding
+    margin: 0 1em 0 0
+
+  button.material-icons
+    height: $toolbarItemHeight
+    width: $toolbarItemHeight
+
+
+.app-toolbar-section
+  display: flex
+  align-items: center
+  width: 40%
+
+.app-toolbar-center
+  width: 20%
+
+@media screen and (max-width: 880px)
+  .app-toolbar-section
+    width: auto
+
+@media screen and (max-width: 500px)
+  .app-toolbar-center
+    display: none
+
+.app-toolbar-name
+  margin: 0
+  width: 100%
+  font-size: 1.1em
+  font-weight: normal
+  text-align: center
+
+
+.team-search
+
+  .team-search-input
+    $padding = 1.2em
+
+    height: $toolbarItemHeight
+    padding-left: $padding
+    padding-right: $padding
+
+    font-size: 14px
+    border: 1px solid $lightBorderColor
+    border-radius: 100px
+
+.app-toolbar-actions
+  display: flex
+  width: 40%
+  flex-grow 2
+  justify-content: flex-end
+  min-width: 300px; // to max sure we don't flex smaller
+
+  > *
+    margin-left 1rem
+    max-height 32px
+
+  .button,
+  button
+    line-height 1.3em
+
+
+.time-control
+  position relative
+  display flex
+
+  .time-control-menu
+    display none
+
+  &.time-control-open .time-control-menu
+    display inherit
+
+.time-control-time
+  position relative // for menu
+  z-index 1001
+  margin 0
+  width 94px // so button and slider pos stay consistent
+  font-size 1.4em
+  line-height 32px
+  font-weight normal
+  cursor pointer
+
+.time-control-toggle
+  margin 0 0.2em
+
+  &:focus
+    box-shadow none
+
+.time-control-slider-container
+  display flex
+  align-items center
+
+  &.is-hidden
+    display none
+
+  .time-slider
+    width 148px
+    margin 6px 0
+
+.time-control-now
+  height 1.4em + 0.7em
+  margin-left 0.5em
+
+
+
+// TOOLBAR DESIGN END ------------------------------------------------------
 
 
 .timezone-list
+  position relative
+  z-index: 5
   display: flex
-  height: 100%;
+  height: 100%
+  max-width: 100%
   justify-content: center
-  flex-grow: 1 // this grows, the sidebar is a fixed width
+  flex-grow: 1 // this grows
+  overflow-y: scroll
+
+// For teams larger than 10 colums
+.timezone-list-wide
+
+  .timezone
+    padding-left: 0.8em
+    padding-right: 0.8em
+
+  .timezone-header
+    width: 72px
+
+  .timezone-time
+    font-size: 1.1em
+
+  .timezone-people-column
+    min-width: auto
+
+  .avatar,
+  .avatar-placeholder
+    height: 54px
+    width: 54px
+    line-height: 54px // for placeholder
+
+
+
+.team-stats
+  position absolute
+  bottom 0.5em
+  left 0
+  right 0
+  text-align center
+  color $mutedColor
+
+.timezone-wrapper
+  display: flex
+  max-width: 100%
 
 .timezone
   padding: 1em
-  
+
 // .timezone-major
-  
+
 .timezone-people
   display: flex
-  
+
 .timezone-people-column
   min-width: $avatarSize
-  margin-right: 1em
+  margin-left: 1em
+
+  &:first-child
+    margin-left: 0
 
 // Timezones that are in nighttime
 for hour in 0 1 2 3 4 5 6 7 22 23
@@ -52,7 +224,7 @@ for hour in 0 1 2 3 4 5 6 7 22 23
   width: 80px
   text-align: left
   white-space: nowrap;
-  
+
   p
     margin: 5px 0
     overflow: hidden
@@ -61,7 +233,7 @@ for hour in 0 1 2 3 4 5 6 7 22 23
 .timezone-time
   margin: 5px 0
   font-weight: normal
-  
+
 .timezone-name
   font-size: 0.6em
   text-transform: uppercase
@@ -73,41 +245,67 @@ for hour in 0 1 2 3 4 5 6 7 22 23
   font-size: 0.7em
   color: #61676F
 
+// Using css for potential faster rendering performance
+.timezone-list-active-filter
+  .avatar,
+  .avatar-placeholder
+    // opacity: 0.3
+    filter: opacity(0.3)
+
 .person
   position: relative
   margin: 0.8em 0
+  cursor: pointer
 
   &:hover
     .person-info
       opacity: 1
+      z-index: 110
+
+  .avatar,
+  .avatar-placeholder
+    // manual reverse stack for max compatibility
+    transition: filter 400ms, -moz-filter 400ms, -webkit-filter 400ms
+
+// For team filter - NOTE - this may cause poor rendering performance
+.person-highlight
+  .avatar,
+  .avatar-placeholder
+    filter: opacity(1)
+
+  .person-info
+    opacity: 1
+    z-index: 110
 
 .person-info
   position: absolute
-  left: -20%
-  right: -20%
+  left: 50%
   bottom: -2em
-  z-index: 1000
-  width: 140%
-  max-width: 110px
+  z-index: 100
+  min-width: 100%
   max-height: 3em
   margin: 0 auto
   padding: 0.3em 0.4em 0.4em
 
+  transform: translateX(-50%)
   opacity: 0
   transition: all 200ms
   background: #fff
   border-radius: 2px
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24)
   font-size: 0.8em
   font-weight: bold
   text-align: center
 
+  &.person-info-short
+    bottom: -1em
+
   p
     margin: 0
     line-height: 1.1em
+    white-space: nowrap
 
-  .person-name
-    margin-bottom: 0.3em
+  .person-city
+    margin-top: 0.3em
 
 .person-city
   font-size: 0.8em
@@ -115,3 +313,295 @@ for hour in 0 1 2 3 4 5 6 7 22 23
   white-space: nowrap
   text-overflow: ellipsis
   overflow: hidden
+
+
+.view-container
+  position: absolute
+  z-index: 1000
+  top: 0
+  left: 0
+  right: 0
+  width: 100%
+  min-height: 100%
+  padding: 1em
+  background: #fff
+
+// Editing modal
+.manage-team--container
+  display: flex
+  height: 100%
+  align-items: stretch
+  padding: 3em 3em 0
+
+.manage-team--header
+  width: 40%
+  padding-right: 2em
+
+.manage-team--header-title
+  margin: 1.6em 0 1em
+
+.manage-team--row
+  margin: 1em 0
+
+input[type="text"].manage-team--invite-url
+  width: 260px
+  color: $mutedColor
+  font-size: 0.8em
+  border: 1px solid $borderColor
+  border-radius: 2px
+  cursor: text
+
+.manage-team--close
+  position: absolute
+  top: 0
+  right: 0
+
+.manage-team--subview
+  flex-grow: 1
+  position: relative
+  max-height: 100%
+
+.manage-team--subview-team
+  max-height: 100%
+  display: flex
+  flex-direction: column
+
+.manage-team--team-header
+  margin-bottom: 1em
+  text-align: center
+
+  input[type="search"]
+    width: 315px
+    border-radius: 0
+
+.manage-team--team-list
+  overflow: auto
+  padding: 0 0.1em
+
+
+.manage-team--team-member
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 0.5em 0
+
+.manage-team--team-member-info
+  display: flex
+  align-items: center
+
+.manage-team--team-member-name
+  margin-left: 1em
+
+.manage-team--team-member-location
+  margin-left: 0.5em
+  color: $mutedColor
+
+.manage-team--person
+  display: flex
+  align-items: center
+
+  .edit-person
+    margin: 2em auto 0
+
+
+// TODO - Change to .edit-info
+.edit-person
+  display: flex
+  flex-direction: column
+  align-items: center
+
+  .profile-location
+    margin-bottom: 1.5em
+
+.edit-person--row
+  width: 240px
+  margin: 0.5em 0
+  text-align: center
+
+  input
+    width: 100%
+
+  .avatar
+    margin: 0 auto
+
+.edit-person--label
+  display: block;
+  margin-right: 0
+  text-align: left
+
+  + button,
+  + .button
+    margin-top: 1em
+
+.edit-info--danger
+  width: calc(240px + 2em)
+  padding: 1em
+  border: 1px solid $errorLightColor
+
+.add-image-placeholder
+  height: $avatarSize * 2
+  width: $avatarSize * 2
+  margin: 0 auto
+  border-radius: 50%
+  background: $fillColor
+  line-height: $avatarSize * 2 - 1px
+  text-align: center
+
+.edit-person--timezone-display
+  display: block
+  padding: 0.4em 10px
+  min-height: 2em
+  color: $mutedColor
+  font-size: 0.7em
+  text-align: left
+
+
+// Mobile
+@media screen and (max-width: 500px)
+
+  .app-container
+    min-width: 100%
+    height: auto
+    flex-direction: column
+
+  .app-toolbar
+    position fixed
+    top 0
+    z-index 10
+    background rgba(255,255,255,0.9)
+    width: 100%
+    padding-left 0.8em
+    padding-right 0.8em
+
+  .app-with-toolbar
+    margin-top:
+
+    .site-branding
+      width 22px;
+      color transparent
+      padding-left 0
+
+    .app-toolbar-branding,
+    .app-toolbar-actions
+      width: auto
+      min-width: auto
+
+    .app-toolbar-actions > *
+      margin-left 0.5em
+
+    .app-toolbar-actions:first-child
+      margin-left 0
+
+    .timezone-list
+      margin-top: 60px
+
+    .person-info
+      transform: none
+
+  .team-search input
+    width 8em
+
+  button.manage-team-button
+    display: none
+
+
+  .app-sidebar
+    position: fixed
+    z-index: 1
+    width: 100%
+    padding: 0.8em
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+
+    .site-branding
+      margin: 0.2em 0 0
+
+    // all children are 50%
+    > *
+      width: 50%
+
+  .app-sidebar--time
+    font-size: 1.5em
+    text-align: right
+
+  .meeting-planner-cta
+    display: none
+
+  .time-slider-container
+    width: 40%
+    order: 4 // put this under the time
+
+  .time-slider
+    margin: 0.9em 0 0
+
+  .app-sidebar--button-row
+    max-height: 27px
+    width: auto
+    margin-top: 0.7em
+    margin-bottom: 0
+    justify-content: flex-start
+
+  .app-sidebar--format-select
+    display: none
+
+  .timezone-list,
+  .timezone-wrapper
+    justify-content: flex-start
+    flex-direction: column-reverse
+
+
+
+  .team-stats
+    position relative
+    padding: 1em 0
+    order -1
+
+  .timezone,
+  .timezone-list-wide .timezone
+    display: flex
+    width: auto
+    padding: 0
+    margin: 0.8em 0.8em 0
+
+  .timezone-header
+    flex-shrink: 0
+    margin: 0 0.8em 0 0
+
+  .timezone-people
+    flex-direction: column
+    flex-grow: 1
+
+  .timezone-people-column
+    display: flex
+    flex-wrap: wrap
+    margin: 0
+
+  .person
+    width: 25%
+    margin: 0 0 0.5em
+
+  .person-info
+    display: block
+    opacity: 1.0
+    position: inherit
+    z-index: inherit
+    left: auto
+    right: auto
+    width: auto
+    padding: 0
+    bottom: auto
+    box-shadow: none
+    font-weight: normal
+
+    .person-name
+      margin: 0.3em 0 0
+
+  .person-city
+    display: none
+
+  .avatar,
+  .avatar-placeholder
+    width: 84%
+    height: 84% // height will match width
+    margin: 0 auto

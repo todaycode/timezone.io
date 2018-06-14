@@ -1,43 +1,79 @@
-/** @jsx React.DOM */
-
 var React = require('react');
+var toolbelt = require('../utils/toolbelt.js');
+var ActionCreators = require('../actions/actionCreators.js');
+var Avatar = require('./avatar.jsx');
 var Schedule = require('./schedule.jsx');
 
 module.exports = React.createClass({
+
+  displayName: 'MeetingPlanner',
+
+  handleClearGroups: function(e) {
+    e.preventDefault();
+    ActionCreators.clearMeetingGroups();
+  },
+
   renderEmpty: function() {
     return (
-      <p className="text-small text-centered">
-        Click someone to start <br/>
-        planning a meeting!
-      </p>
+      <div className="meeting-planner-cta">
+        <p className="meeting-planner-cta-text">
+          Click a team member <br/>
+          to plan a meeting
+        </p>
+      </div>
     );
   },
+
   render: function() {
 
-    // TODO make sure sorted by timezone :)
-    var selectedPeople = this.props.people.filter(function(person) {
-      return person.isSelected;
-    });
-
-    if (!selectedPeople.length) return this.renderEmpty();
-
-    // var commonScheduleRows =
+    if (!this.props.groups || !this.props.groups.length)
+      return this.renderEmpty();
 
     return (
-      <table className="meeting-planner">
-        <tr>
-          {selectedPeople.map(function(person) {
-            return (
-              <th>
-                <img src={person.avatar} 
-                   className="avatar small"
-                   title={person.name} />
-              </th>
-            );
-          })}
-        </tr>
+      <div className="meeting-planner">
 
-      </table>
+        { this.props.suggestedTime ?
+            <div className="meeting-planner-suggested">
+              {this.props.suggestedTime}
+              <div className="meeting-planner-suggested-copy">
+                Local time
+              </div>
+            </div>
+          :
+            <div className="meeting-planner-suggested">
+              <div className="meeting-planner-suggested-copy">
+                No good time window
+              </div>
+            </div>
+        }
+
+
+        {this.props.groups.map(function(group, idx) {
+          return (
+            <div key={idx}
+                 className="meeting-planner-group">
+              <div className="meeting-planner-group-suggested">
+                {group.suggestedTime}
+              </div>
+              <div className="meeting-planner-group-people">
+                {group.people.map(function(p, idx) {
+                  return <Avatar key={idx}
+                                 avatar={p.avatar}
+                                 size={'mini'} />
+                })}
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="meeting-planner-clear">
+          <a href="#"
+             onClick={this.handleClearGroups}>
+            Clear
+          </a>
+        </div>
+
+      </div>
     );
   }
 });
