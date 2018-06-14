@@ -1,7 +1,18 @@
 node_modules
 
-people.json
+nodemon.json
 data.js
+notes.md
+aws.json
+dump.rdb
 
 *.log
 public/stylesheets/*.css
+!public/stylesheets/material-design-icons.css
+public/js/bundles/*
+.awspublish-*
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

@@ -1,6 +1,6 @@
-/** @jsx React.DOM */
-
 var React = require('react');
+var Header = require('../components/header.jsx');
+var Footer = require('../components/footer.jsx');
 var TimezoneList = require('../components/timezoneList.jsx');
 
 var demoTimezones = [
@@ -8,11 +8,11 @@ var demoTimezones = [
     tz: 'America/Los_Angeles',
     people: [
       {
-        _id: '3',
-        name: 'Mary',
+        _id: '2',
+        name: 'Matt',
         tz: 'America/Los_Angeles',
-        location: 'San Francisco',
-        avatar: '/images/avatars/mary.jpg'
+        location: 'Los Angeles',
+        avatar: '/images/avatars/matty.jpg'
       }
     ]
   },
@@ -23,15 +23,15 @@ var demoTimezones = [
         _id: '1',
         name: 'Dan',
         tz: 'America/New_York',
-        location: 'New York',
-        avatar: '/images/avatars/dan.jpg'
+        location: 'Brooklyn',
+        avatar: '/images/avatars/dan_2.jpg'
       },
       {
-        _id: '2',
-        name: 'Sunil',
+        _id: '3',
+        name: 'Jennie',
         tz: 'America/New_York',
-        location: 'DC',
-        avatar: '/images/avatars/sunil.png'
+        location: 'New York',
+        avatar: '/images/avatars/jennie.jpg'
       }
     ]
   },
@@ -43,7 +43,7 @@ var demoTimezones = [
         name: 'Carolyn',
         tz: 'Europe/Rome',
         location: 'Venice',
-        avatar: 'http://www.gravatar.com/avatar/17d551ff33a7b03d93bbd1f8fa18d4f5?s=200'
+        avatar: '//www.gravatar.com/avatar/17d551ff33a7b03d93bbd1f8fa18d4f5?s=200'
       }
     ]
   }
@@ -66,6 +66,9 @@ var cities = [
 ];
 
 module.exports = React.createClass({
+
+  displayName: 'Homepage',
+
   getInitialState: function() {
     return {
       timezones: demoTimezones,
@@ -92,7 +95,7 @@ module.exports = React.createClass({
 
     var nextCity = function() {
       var nextIdx = this.state.searchCityIdx + 1 >= this.state.searchCities.length ?
-                    0 : 
+                    0 :
                     this.state.searchCityIdx + 1;
       this.setState({ searchCityIdx: nextIdx });
       setTimeout(type, TYPE_DELAY);
@@ -120,15 +123,10 @@ module.exports = React.createClass({
     var honeyPotStyle = { "position": "absolute", "left": "-5000px" };
     return (
       <div className="container">
-      
-        <header className="site-header">
-          <h1 className="site-branding">Timezone.io</h1>
-          <div className="site-header--right">
-            <a href="/team/buffer" className="button cta">
-              Live demo
-            </a>
-          </div>
-        </header>
+
+        <Header {...this.props}
+                demo={true}
+                link={false} />
 
         <div className="hp-section demo">
 
@@ -145,13 +143,17 @@ module.exports = React.createClass({
 
         <div className="hp-section alt">
 
-          <div className="hp-content-container">
+          <div className="hp-content-container hp-pitch-container">
 
             <h3 className="hp-pitch">
               Easily plan meetings + calls with your remote, nomadic team without having to Google <br/>
-              <span className="hp-pitch-search">time in {this.state.searchCity}</span><br/> 
+              <span className="hp-pitch-search">time in {this.state.searchCity}</span><br/>
               <em>...ever again.</em>
             </h3>
+
+            <a href="/signup" className="button cta large">
+              Sign up and create your team today!
+            </a>
 
           </div>
 
@@ -162,85 +164,28 @@ module.exports = React.createClass({
           <div className="hp-content-container">
 
             <p className="hp-description">
-              Modern global teams have awesome people spread across multiple timezones. 
+              Modern global teams have awesome people spread across multiple timezones.
               Lots of teams have <em>digital nomads</em> changing locations faster than
-              we can keep up with. Often it gets tricky to remember what time it is 
-              where your teammates are. That's why we built <strong>Timezone.io</strong>.
-            </p>
-
-            <h3 className="hp-description">
-              So, what's next?
-            </h3>
-
-            <p className="hp-description">
-              We're starting off with a simple, clear way to display where your team is by timezone. 
-              Next we'll add some ways to automatically update people's locations. 
-              We have a few ideas we're been thinking about, but we'd love to hear 
-              what you would work best for you: Update your location using the
-              location of your last Tweet? Want to use Slackbot or Hubot? 
-              What about a command line utility? We can't wait to hear your ideas!
+              we can keep up with. Often it gets tricky to remember what time it is
+              where your teammates are. Enter <strong>Timezone.io</strong>.
             </p>
 
             <h4 className="hp-description">
               Send your wants, needs and encouragement over to <a href="https://twitter.com/timezoneio">
-              <strong>@timezone.io</strong> on Twitter</a> and if you would like to 
-              be notified when you can sign up, add your email address below:
+              <strong>@timezoneio</strong> on Twitter</a>
             </h4>
 
-            <div className="hp-description">
-
-              <div id="mc_embed_signup">
-              <form action="//timezone.us10.list-manage.com/subscribe/post?u=34f393bbea3791dbad5109a7b&amp;id=cb191e06bc" 
-                    method="post" 
-                    id="mc-embedded-subscribe-form" 
-                    name="mc-embedded-subscribe-form" 
-                    className="validate" 
-                    target="_blank" 
-                    noValidate>
-                <div id="mc_embed_signup_scroll">
-                
-                  <div className="mc-field-group">
-                    <input type="email" 
-                           defaultValue="" 
-                           name="EMAIL" 
-                           placeholder="email address"
-                           className="required email" 
-                           id="mce-EMAIL"/>
-                  </div>
-                  <div id="mce-responses" className="clear">
-                    <div className="response" id="mce-error-response" style={{display: "none"}}></div>
-                    <div className="response" id="mce-success-response" style={{display: "none"}}></div>
-                  </div>
-                  <div style={honeyPotStyle}>
-                    <input type="text" name="b_34f393bbea3791dbad5109a7b_cb191e06bc" tabIndex="-1" defaultValue="" />
-                  </div>
-                  <div className="clear">
-                    <input type="submit" 
-                          value="Sign up for Early Access" 
-                          name="subscribe" 
-                          id="mc-embedded-subscribe" 
-                          className="button cta"/>
-                  </div>
-                </div>
-              </form>
-              </div>
+            <div style={{ textAlign: 'center' }}>
+              <a href="/signup" className="button cta">
+                Sign up now!
+              </a>
             </div>
 
           </div>
-          
+
         </div>
 
-        <footer className="hp-section alt site-footer">
-
-          <div className="hp-content-container">
-
-            <p>
-              © 2015 Timezone.io
-            </p>
-
-          </div>
-
-        </footer>
+        <Footer />
 
       </div>
     );

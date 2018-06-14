@@ -7,70 +7,156 @@ $buttonRadius = 20px
 button
   display: inline-block
   padding: 0.3em 1em 0.4em
-  
+
   background-color: lighten($buttonColor, 10%)
   border-radius: $buttonRadius
-  border: 0
-  
+  border: 1px solid transparent
+
   font-size: 15px
   line-height: 1.4em
   color: $textColor
   text-decoration: none
-  
+
+  + .button,
+  + button
+    margin-left: 0.2em
+
+  // Button sizes
+  &.small
+    font-size: 12px
+
+  &.large
+    font-size: 18px
+
+  // Button styles
+  &.material-icons
+    height: 2em
+    width: 2em
+    padding: 0
+    border-radius: 160px // to keep it circular
+
+  // As children:
+  // .material-icons
+  //   position: relative
+  //   top: 4px
+  //   padding-right: 2px
+  //   line-height: 12px
+
+
+  &.clear,
+  &.hollow
+    background-color: transparent
+
+    &:hover
+      background-color: rgba(182, 186, 189, 0.2)
+
+  &.hollow
+    border: 1px solid $borderColor
+
+  &.cta
+    background-color: lighten($brandColor, 10%)
+    color: #fff
+
+    &.hollow
+      border-color: transparent
+
+    &:hover
+      background-color: $brandColor
+
+  &.danger
+    background-color: lighten($red, 10%)
+    color: #fff
+    &:hover
+      background-color: $red
+
+    &[disabled]:hover
+      background-color: lighten($red, 10%)
+
   // Button states
   &::after
     content: none
     width: inherit
     height: inherit
-    
+
   &:focus
     outline: 0
-  
+    box-shadow: 0 0 4px rgba(0,0,0, 0.5)
+
   &:hover
     background-color: darken($buttonColor, 8%)
-    
+
   &[disabled]
     opacity: 0.5
     &:hover
       background-color: inherit
-    
+
   &.selected
     background-color: darken($buttonColor, 10%)
-    
-  // Button sizes
-  &.small
-    font-size: 12px
-    
-  // Button styles
-  &.hollow
-    border: 1px solid $borderColor
-    
-  &.cta
-    background-color: lighten($brandColor, 10%)
+
+
+  // Networks
+  &.twitter
+    padding-left: 2.8em
     color: #fff
-    
+    background-color: $twitter
+    background-image: url(../images/social/twitter-white-100x100.png)
+    background-size: 28px
+    background-repeat: no-repeat
+    background-position: 0.6em 50%
+
     &:hover
-      background-color: $brandColor
-  
-  
+      background-color: darken($twitter, 8%)
+
+  &.gravatar
+    padding-left: 2.6em
+    color: #fff
+    background-color: $gravatar
+    background-image: url(../images/social/gravatar-white-100x100.png)
+    background-size: 28px
+    background-repeat: no-repeat
+    background-position: 0.6em 35% // push it up a pixel
+
+    &:hover
+      background-color: darken($gravatar, 8%)
+
 input[type="submit"].button
   border: 0
-  
+
 
 // Button groups
 .button-group
   display: inline-block
-  
+
   > button,
   > .button
     border-radius: 0
     border-right-width: 0
-    
+
+    + .button,
+    + button
+      margin-left: 0
+
     &:first-of-type
       padding-left: 1.1em
       border-radius: $buttonRadius 0 0 $buttonRadius
-      
+
     &:last-of-type
       padding-right: 1.1em
       border-right-width: 1px
       border-radius: 0 $buttonRadius $buttonRadius 0
+
+
+// NOTE - Alignment issues when used inline with other elements
+.button-upload
+  position: relative
+  overflow: hidden
+
+  input[type="file"]
+    position: absolute
+    top: 0
+    left: -100%
+    z-index: 5
+    height: 100%
+    width: 200%
+    opacity: 0
+    cursor: pointer

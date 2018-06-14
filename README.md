@@ -1,24 +1,26 @@
-# [Timezone.io](http://timezone.io)
+# [Timezone.io](https://timezone.io)
 
-Timezone is an application aimed at helping remote teams by making it easier
-to see where and **when** their coworkers are.
+This is the official repo for the Timezone.io website. This is a SaaS project
+where all development is done in the open and is open to contributions from
+anyone! The purpose of the Timezone.io project is as follows
 
-# Setup
+> To improve how globally distributed teams coordinate across various timezones
+> in order to be mindful of each other's personal availability and schedule.
 
-Install all the deps and gulp globally:
+- link to article on medium
 
-```shell
-$ npm i
-$ npm i -g gulp
-```
+## Contributing
+Are you a developer, designer, copywriter or product-minded person? We'd
+love your contributions and input! Learn more about in the
+[Contributing document](https://github.com/timezoneio/timezoneio/blob/master/CONTRIBUTING.md).
+You can also learn how to run this project locally in the
+[Setup guide](https://github.com/timezoneio/timezoneio/blob/master/docs/Setup.md).
 
-To start the server and restart on changes, use nodemon:
-```shell
-nodemon
-```
-
-In a separate shell, watch for changes to the files and automatically 
-re-browserify the bundles:
-```shell
-gulp watch
-```
+## License
+This project is open source, but is still released under the copyright of
+Dan Farrelly. This solely done to prevent redistribution. This project has
+been open sourced to allow people to learn from, encourage collaboration and
+greatly improve the development of [Timezone.io](https://timezone.io). You can
+fork, make contributions, modify the project and use parts of the code in your
+own project, but you cannot run this software on your own servers for the
+purpose of accepting signups and creating a competing service ;)
