@@ -1,11 +1,9 @@
-require('../helpers/fetchPolyfill');
-var React  = require('react');
+// --------------------- timezone.io ----------------------------
+require("../helpers/fetchPolyfill");
+var React = require("react");
 
-var About = React.createFactory(require('../views/about.jsx'));
+var About = React.createFactory(require("../views/about.jsx"));
 
-var targetNode = document.querySelector('#page');
+var targetNode = document.querySelector("#page");
 
-React.render(
-  About(appData),
-  targetNode
-);
+React.render(About(appData), targetNode);
