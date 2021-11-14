@@ -7,4 +7,5 @@ ADD conf.d/* /etc/nginx/conf.d/
 # CMD /home/config.sh && nginx
 
 # NOTE
+# NOTE
 # Mount the /var/log/nginx volme to read the logs
