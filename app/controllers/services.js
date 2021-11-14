@@ -1,12 +1,12 @@
-var aws = require('aws-sdk');
-const ENV = require('../../env.js');
+var aws = require("aws-sdk");
+const ENV = require("../../env.js");
 
 var AWS_ACCESS_KEY = ENV.AWS_ACCESS_KEY;
 var AWS_SECRET_KEY = ENV.AWS_SECRET_KEY;
 var S3_BUCKET = ENV.S3_BUCKET;
 
-var services = module.exports = {};
-
+var services = (module.exports = {});
+// --------------------- timezone.io ----------------------------
 services.signS3 = function(req, res) {
   aws.config.update({
     accessKeyId: AWS_ACCESS_KEY,
@@ -19,18 +19,16 @@ services.signS3 = function(req, res) {
     Key: req.query.file_name,
     Expires: 60,
     ContentType: req.query.file_type,
-    ACL: 'public-read'
+    ACL: "public-read"
   };
 
-  s3.getSignedUrl('putObject', s3_params, function(err, data){
-    if (err) return res.status(500).send({ message: 'Could not sign url' });
+  s3.getSignedUrl("putObject", s3_params, function(err, data) {
+    if (err) return res.status(500).send({ message: "Could not sign url" });
 
     var returnData = {
       signedRequest: data,
-      url: 'https://' + S3_BUCKET + '.s3.amazonaws.com/' + req.query.file_name
+      url: "https://" + S3_BUCKET + ".s3.amazonaws.com/" + req.query.file_name
     };
     res.json(returnData);
   });
-
-
 };
