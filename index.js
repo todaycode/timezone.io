@@ -1,19 +1,19 @@
-var mongoose = require('mongoose');
-var redisClient = require('./app/helpers/redis');
-var server = require('./app/server.js');
-const ENV = require('./env.js');
+var mongoose = require("mongoose");
+var redisClient = require("./app/helpers/redis");
+var server = require("./app/server.js");
+const ENV = require("./env.js");
 
 var MAX_RETRIES = 100;
 var retries = -1;
 
 var env = process.env.NODE_ENV;
-var isProduction = env === 'production';
+var isProduction = env === "production";
 
-var MONGO_URL = ENV.MONGO_URL || 'mongodb://db/timezone';
+var MONGO_URL = ENV.MONGO_URL || "mongodb://db/timezone";
 
-var connect = function () {
+var connect = function() {
   if (retries >= MAX_RETRIES)
-    return console.info('Couldn\'t connect to the database');
+    return console.info("Couldn't connect to the database");
 
   var options = { server: { socketOptions: { keepAlive: 1 } } };
   mongoose.connect(MONGO_URL);
@@ -22,12 +22,10 @@ var connect = function () {
 };
 connect();
 
-
-mongoose.connection.on('error', console.error);
-mongoose.connection.on('disconnected', connect);
-mongoose.connection.once('open', function (callback) {
-
-  console.info('We\'re connected, booyah! Starting up the server...');
+mongoose.connection.on("error", console.error);
+mongoose.connection.on("disconnected", connect);
+mongoose.connection.once("open", function(callback) {
+  console.info("We're connected, booyah! Starting up the server...");
   server(mongoose.connection, redisClient);
-
 });
+// --------------------- timezone.io ----------------------------

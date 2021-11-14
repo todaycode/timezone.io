@@ -26,7 +26,7 @@ Kick everything off using Docker Compose:
 ```shell
 $ docker-compose up -d
 ```
-
+// --------------------- timezone.io ----------------------------
 It will take a little bit to download the node, mongo, and redis images, but when it's complete,
 the app should be available at http://localhost:80. Note - it takes a little bit for the server
 to start up initially.

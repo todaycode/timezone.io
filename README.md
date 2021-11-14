@@ -16,6 +16,7 @@ love your contributions and input! Learn more about in the
 You can also learn how to run this project locally in the
 [Setup guide](https://github.com/timezoneio/timezoneio/blob/master/docs/Setup.md).
 
+
 ## License
 This project is open source, but is still released under the copyright of
 Dan Farrelly. This solely done to prevent redistribution. This project has
