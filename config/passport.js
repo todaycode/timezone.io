@@ -1,17 +1,15 @@
-var UserModel = require('../app/models/user');
-var TeamModel = require('../app/models/team');
-var local = require('./passport/local');
-var twitter = require('./passport/twitter');
-
-module.exports = function (passport) {
-
+var UserModel = require("../app/models/user");
+var TeamModel = require("../app/models/team");
+var local = require("./passport/local");
+var twitter = require("./passport/twitter");
+// --------------------- timezone.io ----------------------------
+module.exports = function(passport) {
   // serialize sessions
   passport.serializeUser(function(user, done) {
     done(null, user.id);
   });
 
   passport.deserializeUser(function(id, done) {
-
     // This is where we should cache the user
     // and cache the teams the user is on
 
@@ -32,5 +30,4 @@ module.exports = function (passport) {
   passport.use(twitter);
   // passport.use(google);
   // passport.use(facebook);
-
 };

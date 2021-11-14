@@ -1,7 +1,6 @@
-var keyMirror = require('keymirror');
-
+var keyMirror = require("keymirror");
+// --------------------- timezone.io ----------------------------
 module.exports = keyMirror({
-
   // View actions
   CHANGE_TIME_FORMAT: 0,
   ADJUST_TIME_DISPLAY: 0,
@@ -21,5 +20,4 @@ module.exports = keyMirror({
   UPDATED_TEAM_DATA: 0,
   UPDATED_USER_DATA: 0,
   TEAM_MEMBER_REMOVED: 0
-
 });

@@ -1,13 +1,12 @@
-var moment = require('moment-timezone');
-var toolbelt = require('../utils/toolbelt');
-var transform = require('../utils/transform');
-var timeUtils = require('../utils/time');
-var AppDispatcher = require('../dispatchers/appDispatcher');
-var ActionTypes = require('../actions/actionTypes');
+var moment = require("moment-timezone");
+var toolbelt = require("../utils/toolbelt");
+var transform = require("../utils/transform");
+var timeUtils = require("../utils/time");
+var AppDispatcher = require("../dispatchers/appDispatcher");
+var ActionTypes = require("../actions/actionTypes");
 
-
+// --------------------- timezone.io ----------------------------
 class AppState {
-
   constructor(initialState) {
     this._state = toolbelt.clone(window.appData);
 
@@ -36,7 +35,9 @@ class AppState {
   }
 
   getPersonById(id) {
-    return this._state.people.filter(function(p) { return p._id === id; })[0];
+    return this._state.people.filter(function(p) {
+      return p._id === id;
+    })[0];
   }
 
   getGrouping() {
@@ -49,9 +50,12 @@ class AppState {
   }
 
   updateGrouping() {
-    this._state.timezones = transform(this._state.time, this._state.people, this.getGrouping());
+    this._state.timezones = transform(
+      this._state.time,
+      this._state.people,
+      this.getGrouping()
+    );
   }
-
 
   // Assumes time is not current :/
   setTime(timeMoment) {
@@ -62,12 +66,14 @@ class AppState {
   updateToCurrentTime() {
     var now = moment();
 
-    if (now.hour() === this._state.time.hour() &&
-        now.minute() === this._state.time.minute())
+    if (
+      now.hour() === this._state.time.hour() &&
+      now.minute() === this._state.time.minute()
+    )
       return;
 
-    this._state.time.hour( now.hour() );
-    this._state.time.minute( now.minute() );
+    this._state.time.hour(now.hour());
+    this._state.time.minute(now.minute());
     this._state.isCurrentTime = true;
   }
 
@@ -84,7 +90,7 @@ class AppState {
   }
 
   setActiveFilter(term) {
-    this._state.activeFilter = term && term.length > 2 && new RegExp(term, 'i');
+    this._state.activeFilter = term && term.length > 2 && new RegExp(term, "i");
   }
 
   updateTeamData(data) {
@@ -124,8 +130,11 @@ class AppState {
   }
 
   removeTeamMember(data) {
-    var idx = this._state.people.map(function(p) { return p._id; })
-                                .indexOf(data.usedId);
+    var idx = this._state.people
+      .map(function(p) {
+        return p._id;
+      })
+      .indexOf(data.usedId);
     if (idx > -1) {
       this._state.people.splice(idx, 1);
       this.updateGrouping();
@@ -133,32 +142,33 @@ class AppState {
   }
 
   toggleSelectPerson(id) {
-    var idx = this._state.meeting.people.map(function(p) { return p._id; })
-                                        .indexOf(id);
-    if (idx === -1)
-      this._state.meeting.people.push(this.getPersonById(id));
-    else
-      this._state.meeting.people.splice(idx, 1);
+    var idx = this._state.meeting.people
+      .map(function(p) {
+        return p._id;
+      })
+      .indexOf(id);
+    if (idx === -1) this._state.meeting.people.push(this.getPersonById(id));
+    else this._state.meeting.people.splice(idx, 1);
 
     this.organizeMeetingGroups();
     this.findMeetingTime();
   }
 
   organizeMeetingGroups() {
-    var zoneGroups = toolbelt.groupBy('utcOffset', this._state.meeting.people);
+    var zoneGroups = toolbelt.groupBy("utcOffset", this._state.meeting.people);
 
     this._state.meeting.groups = Object.keys(zoneGroups)
-                                       .map(function(o) {
-                                         var utcOffset = parseInt(o, 10);
-                                         return {
-                                           utcOffset: utcOffset,
-                                           utcOffsetHours: utcOffset / 60,
-                                           people: zoneGroups[utcOffset]
-                                         };
-                                       })
-                                       .sort(function(a, b) {
-                                         return b.utcOffset - a.utcOffset;
-                                       });
+      .map(function(o) {
+        var utcOffset = parseInt(o, 10);
+        return {
+          utcOffset: utcOffset,
+          utcOffsetHours: utcOffset / 60,
+          people: zoneGroups[utcOffset]
+        };
+      })
+      .sort(function(a, b) {
+        return b.utcOffset - a.utcOffset;
+      });
   }
 
   getGMTAvailableHoursForGroups(groups, workStartHour, workEndHour) {
@@ -180,7 +190,9 @@ class AppState {
       }, true);
     });
 
-    var hasAvailableHours = !!availableHoursIndexes.filter(function(isAvailable) {
+    var hasAvailableHours = !!availableHoursIndexes.filter(function(
+      isAvailable
+    ) {
       return isAvailable;
     }).length;
 
@@ -189,9 +201,11 @@ class AppState {
 
     // If there isn't any overlap time, we expand the work day by 1 hour in both directions
     if (!hasAvailableHours && isExpandable)
-      return this.getGMTAvailableHoursForGroups(groups,
-                                                Math.max(6, workStartHour - 1),
-                                                Math.min(21, workEndHour + 1));
+      return this.getGMTAvailableHoursForGroups(
+        groups,
+        Math.max(6, workStartHour - 1),
+        Math.min(21, workEndHour + 1)
+      );
 
     // Get the suggested meeting time in hours GMT
     var gmtAvailableHours = gmtHours.map(function(hour, idx) {
@@ -210,12 +224,13 @@ class AppState {
   }
 
   findMeetingTime() {
-
     this._state.meeting.groups.forEach(function(group) {
       group.hours = createHoursArrayForOffset(group.utcOffsetHours);
     });
 
-    var suggestedTimeWindow = this.getSuggestedMeetingTimeWindow(this._state.meeting.groups);
+    var suggestedTimeWindow = this.getSuggestedMeetingTimeWindow(
+      this._state.meeting.groups
+    );
     var startHour = suggestedTimeWindow[0];
     var endHour = suggestedTimeWindow[1];
 
@@ -226,20 +241,26 @@ class AppState {
 
     // Get suggested local time
     var localUtcHourOffset = moment().utcOffset() / 60;
-    var suggestedTime = timeUtils.formatLocalTimeWindow(startHour,
-                                                        endHour,
-                                                        localUtcHourOffset,
-                                                        this._state.timeFormat);
+    var suggestedTime = timeUtils.formatLocalTimeWindow(
+      startHour,
+      endHour,
+      localUtcHourOffset,
+      this._state.timeFormat
+    );
 
     this._state.meeting.suggestedTime = suggestedTime;
 
     // Get times for each zone
-    this._state.meeting.groups.forEach(function(group) {
-      group.suggestedTime = timeUtils.formatLocalTimeWindow(startHour,
-                                                            endHour,
-                                                            group.utcOffsetHours,
-                                                            this._state.timeFormat);
-    }.bind(this));
+    this._state.meeting.groups.forEach(
+      function(group) {
+        group.suggestedTime = timeUtils.formatLocalTimeWindow(
+          startHour,
+          endHour,
+          group.utcOffsetHours,
+          this._state.timeFormat
+        );
+      }.bind(this)
+    );
   }
 
   clearMeetingGroups() {
@@ -247,7 +268,6 @@ class AppState {
       people: []
     };
   }
-
 }
 
 // Helper functions
@@ -260,8 +280,7 @@ var createHoursArray = function() {
 
 var createHoursArrayForOffset = function(utcOffsetHours) {
   var hours = createHoursArray();
-  if (utcOffsetHours === 0)
-    return hours;
+  if (utcOffsetHours === 0) return hours;
   if (utcOffsetHours > 0) {
     var start = hours.splice(utcOffsetHours);
     return start.concat(hours);
@@ -284,8 +303,7 @@ var getLongestContinuousSegment = function(hours) {
       activeSegment.push(hour);
     }
   }
-  if (activeSegment.length)
-    segments.push(activeSegment);
+  if (activeSegment.length) segments.push(activeSegment);
 
   var longestSegment = segments.reduce(function(longest, segment) {
     return segment.length > longest.length ? segment : longest;
